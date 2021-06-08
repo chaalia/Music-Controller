@@ -1,6 +1,6 @@
 from rest_framework import generics
 from django.http import HttpResponse
-from rest_framework.views import ApiView
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import Room
@@ -18,7 +18,7 @@ class RoomView(generics.CreateAPIView):
     serializer_class = RoomSerializer
 
 
-class CreateRoomView(ApiView):
+class CreateRoomView(APIView):
     queryset = Room.objects.all()
     serializer_class = CreateRoomSerializer
 
