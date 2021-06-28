@@ -10,10 +10,11 @@ export default class App extends Component {
   render() {
     return (
       <div>
-    <HomePage />
-    </div>)
+        <HomePage />
+      </div>
+    );
   }
 }
 
-const appDiv = document.getElementById("root");
-render(<App name="Rjab"/>, appDiv);
+const appDiv = document.getElementById("app");
+render(<App />, appDiv);
