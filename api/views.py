@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import generics, status
+from rest_framework import generics, serializers, status
 from .serializers import RoomSerializer, CreateRoomSerializer
 from .models import Room
 from rest_framework.views import APIView
@@ -12,6 +12,25 @@ from rest_framework.response import Response
 class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+
+
+class GetRoom(APIView):
+    serializer_class = RoomSerializer
+    lookup_url_kwarg = 'code'
+
+    def get(self, request, format=None):
+        code = request.GET.get(self.lookup_url_kwarg)
+        if code is not None:
+            room = Room.objects.filter(code=code)
+            if len(room) < 0 :
+                data = RoomSerializer(room[0]).data
+                data['is_host'] = self.request.session.session_key == room[0].host
+                return Response(data, status= status.HTTP_200_OK)
+        
+            return Response({'bad_request': 'invalid Room Code'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'bad_request': 'code not found in parameter'}, status=status.HTTP_404_NOT_FOUND)    
+
+
 
 
 class CreateRoomView(APIView):
